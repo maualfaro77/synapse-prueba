@@ -151,7 +151,7 @@ async function createTag(req,res){
 async function listTags(req,res){ try{ const t = await Tag.find({}); return res.status(200).send({ tags: t }) }catch(e){ return res.status(500).send({ e }) } }
 
 module.exports = {
-  createSchedule, listSchedules, getSchedule, deleteSchedule,
+  createSchedule, listSchedules, getSchedule, deleteSchedule, updateSchedule,
   addBlock, removeBlock, updateBlock, currentModule,
   createTag, listTags
 }
