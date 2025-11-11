@@ -1,0 +1,197 @@
+/* Horario Inteligente - styles (inspirado en Figma) */
+:root{
+	--bg: #2B2933; /* color principal */
+	--panel: #241f27;
+	--muted: #9a8f99;
+	--accent: #DAB177; /* color secundario */
+	--primary-pink: #9F598E;
+	--secondary-purple: #55354B;
+	--tile-blue: #7383BA;
+	--tile-teal: #5390A0;
+	--card-radius:18px;
+	--pad:14px;
+	--text: #efecec;
+}
+
+body {
+	font-family: Inter, 'Segoe UI', Roboto, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background: linear-gradient(180deg, var(--bg) 0%, #211b24 100%);
+	color: var(--text);
+	-webkit-font-smoothing: antialiased;
+}
+
+.container {
+	max-width: 1100px;
+	margin: 20px auto;
+	padding: 12px;
+}
+
+.layout {
+	display: flex;
+	gap: 20px;
+}
+
+.sidebar {
+	width: 300px;
+	background: var(--panel);
+	border-radius: 16px;
+	padding: 14px;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+	height: calc(100vh - 80px);
+	overflow: auto;
+}
+
+/* Off-canvas behavior for mobile: use transform for smooth animation */
+.sidebar{
+	transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .2s;
+	will-change: transform;
+}
+
+#sidebar-overlay{
+	position: fixed; inset: 0; background: rgba(0,0,0,0.0); z-index: 1100; pointer-events: none; opacity: 0; transition: opacity .22s ease;
+}
+#sidebar-overlay.visible{ pointer-events: auto; opacity: 1; background: rgba(0,0,0,0.36); }
+
+.brand h2 {
+	margin: 0 0 10px 0;
+	font-size: 22px; /* Title Large 22 */
+	color: var(--accent);
+}
+
+.form-vertical {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+input, select {
+	padding: 10px 12px;
+	border-radius: 12px;
+	border: 0;
+	background: rgba(255,255,255,0.04);
+	color: var(--text);
+	font-size:14px; /* Texto Large 14 */
+}
+
+input::placeholder{ color: rgba(255,255,255,0.5) }
+
+.btn-primary {
+	background: linear-gradient(180deg, var(--primary-pink), #9a3d87);
+	color: white;
+	padding: 10px 12px;
+	border: none;
+	border-radius: 999px;
+	cursor: pointer;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+.btn-small {
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.06);
+	padding: 8px 10px;
+	border-radius: 8px;
+	cursor: pointer;
+	color: var(--text);
+}
+
+.schedule-list h3 {
+	margin-top: 18px;
+	margin-bottom: 8px;
+	font-size: 16px; /* Body Base 16 */
+	color: var(--accent);
+}
+
+.schedule-item {
+	padding: 18px 14px;
+	border-radius: var(--card-radius);
+	margin-bottom: 14px;
+	cursor: pointer;
+	border: 0;
+	color: var(--text);
+	font-weight:600;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+	min-height:56px;
+	display:flex;align-items:center;
+}
+
+.schedule-item:hover { opacity:0.95 }
+.schedule-item.active { outline: 2px solid rgba(255,255,255,0.06); transform: translateY(-2px) }
+
+.schedule-tile-blue{ background: linear-gradient(180deg,var(--tile-blue), #6f8fb0) }
+.schedule-tile-pink{ background: linear-gradient(180deg,var(--primary-pink), #a04a8a) }
+.schedule-tile-deep{ background: linear-gradient(180deg,var(--secondary-purple), #3e2030) }
+.schedule-tile-teal{ background: linear-gradient(180deg,var(--tile-teal), #3aa9ab) }
+
+.main {
+	flex: 1;
+}
+
+.page-header{
+	display:flex;align-items:center;gap:12px;margin-bottom:12px
+}
+.page-header h1{font-size:22px;margin:0} /* Title Large 22 */
+.page-header .btn-small{padding:8px 10px}
+
+.controls{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+
+.quick-view {
+	background: transparent;
+	padding: 8px 0 18px 0;
+}
+
+.no-activity{padding:12px;background:transparent;border-radius:6px;color:var(--muted)}
+
+.modules{display:flex;gap:12px;margin-top:10px}
+.module{padding:18px;border-radius:18px;min-width:160px;min-height:84px;color:var(--text);display:flex;flex-direction:column;justify-content:center}
+.module.module-prev{background:linear-gradient(180deg,var(--secondary-purple), #442836)}
+.module.module-current{background:linear-gradient(180deg,var(--primary-pink), #9c4f8a);box-shadow:0 14px 36px rgba(156,79,138,0.18)}
+.module.module-next{background:linear-gradient(180deg,var(--accent), #caa76f);color:#1b1720}
+.module h3{margin:0 0 6px;font-size:16px} /* Subtitle / Body Base 16 */
+.module .time{font-weight:700;font-size:14px} /* Text Large 14 */
+.module .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,0.08);font-size:12px;margin-top:8px;color:inherit}
+
+.manage{margin-top:18px;padding-top:12px}
+.manage-row{display:flex;gap:16px}
+.manage-col{flex:1}
+.form-inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.form-inline input,.form-inline select{padding:6px;border-radius:6px;border:1px solid #ddd}
+.block-item{padding:8px;border-radius:6px;background:#fff;border:1px solid #eaeaea;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.block-info{font-size:14px}
+.block-actions button{margin-left:6px}
+.btn-cancel{background:#6c757d}
+
+/* Toasts */
+#toast-container{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{min-width:220px;padding:10px 12px;border-radius:8px;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.12);font-size:14px;transform:translateY(-6px);opacity:0;transition:transform .24s cubic-bezier(.2,.9,.2,1),opacity .18s}
+.toast.show{transform:none;opacity:1}
+.toast.removing{opacity:0;transform:translateX(24px);transition:transform .18s,opacity .12s}
+.toast--success{background:#28a745}
+.toast--error{background:#dc3545}
+.toast--info{background:#007bff}
+.toast .toast-close{float:right;margin-left:8px;background:transparent;border:0;color:#fff;font-weight:700}
+.field-error{color:#dc3545;font-size:13px;margin-top:4px}
+
+/* Mobile / responsive */
+@media (max-width: 900px){
+	.layout{flex-direction:column}
+	.sidebar{position:fixed;transform:translateX(-110%);left:12px;top:72px;width:280px;height:calc(100vh - 72px);z-index:1200;box-shadow:0 18px 40px rgba(10,20,40,0.12)}
+	.sidebar.open{transform:translateX(0)}
+	/* overlay handled via #sidebar-overlay */
+	.container{padding:12px}
+	.page-header h1{font-size:16px}
+	.controls{flex-wrap:wrap}
+	input, select{font-size:16px}
+	.form-inline{flex-direction:column;align-items:stretch}
+	.form-inline input,.form-inline select{width:100%}
+	.modules{flex-direction:column}
+	.module{min-width:unset;width:100%}
+	.schedule-list{margin-top:14px}
+}
+
+@media (max-width: 480px){
+	.sidebar{width:92%;left:-100%}
+	.sidebar.open{left:4%}
+	.page-header h1{font-size:15px}
+}
