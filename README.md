@@ -341,7 +341,43 @@ npm test
 
 ---
 
-## 📄 Licencia
+## � Principios de Codificación Segura (implementados)
+
+- Validación de entradas: los endpoints de autenticación usan `express-validator` para validar email y password. Las rutas del backend realizan validaciones adicionales en `app/utils`.
+- Comunicación cifrada: en producción la API debe exponerse únicamente sobre HTTPS. Hay un middleware opcional (`FORCE_HTTPS=true`) que redirige a HTTPS en entornos detrás de proxy.
+- Autenticación: JWT con expiración (controlado por `JWT_SECRET` en `.env`). Las rutas sensibles (crear schedules, modificar bloques) están protegidas por `app/middleware/auth.js`.
+- Manejo de errores: controladores retornan códigos HTTP adecuados (400,401,409,500) y mensajes estructurados; revisar `app/controllers` para detalles.
+- Protección de secretos: las claves y URIs deben almacenarse en `.env`. `app/config/configuracion.js` usa `dotenv` y `README` incluye `.env.example`.
+
+## 🏗️ Diagrama de arquitectura
+
+Usa este diagrama para compartir con el equipo (Mermaid):
+
+```mermaid
+graph LR
+  A[App móvil (Cordova/Android)] -->|HTTPS| B(API REST - Node/Express)
+  B -->|MongoDB Driver| C[MongoDB (Cloud o local)]
+  B -->|JWT / Auth| D[Servicio de Autenticación (JWT) - integrado]
+  note right of B: Middlewares: CORS, Auth (JWT), HTTPS redirect
+```
+
+Este flujo cubre: App móvil → API REST → Cloud Service (MongoDB Atlas o similar). En producción, pon la API detrás de un reverse-proxy (NGINX) que gestione TLS.
+
+## 🧭 Estrategia de Versionamiento y Git
+
+- Ramas recomendadas: `main` (estables), `develop` (integración), `feature/*` (nuevas features), `fix/*` (hotfixes).
+- Versionamiento semántico: etiqueta releases con `vMAJOR.MINOR.PATCH` (por ejemplo `v1.0.0`).
+- Commits descriptivos: usar mensajes tipo `feat(...)`, `fix(...)`, `chore(...)`, `docs(...)`.
+- Ejemplo de publicar una etiqueta con nombre solicitado por el equipo:
+
+```powershell
+git tag -a "Estrategia_Versionamiento_Rest-Prueba9c_v1.0.0" -m "Release inicial con auth y UI"
+git push origin --tags
+```
+
+Coloca las etiquetas con la convención: `Estrategia_Versionamiento_Nombre-del-Proyecto_vX.Y.Z` si así lo requiere el equipo.
+
+## �📄 Licencia
 
 Este proyecto es de uso interno. Consulta con tu equipo antes de distribuir.
 

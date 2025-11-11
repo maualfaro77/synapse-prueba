@@ -26,7 +26,3 @@ npm-debug.log*
 
 # Otros
 coverage/
-node_modules
-app/config/configuracion.js
-.env.example
-coverage
