@@ -1,5 +1,6 @@
 const Schedule = require('../models/scheduleModel')
 const Tag = require('../models/tagModel')
+const mongoose = require('mongoose')
 const { parseHMToMinutes, hasOverlapWithList } = require('../utils/timeUtils')
 const { computeModules } = require('../utils/scheduleUtils')
 
@@ -150,8 +151,42 @@ async function createTag(req,res){
 }
 async function listTags(req,res){ try{ const t = await Tag.find({}); return res.status(200).send({ tags: t }) }catch(e){ return res.status(500).send({ e }) } }
 
+async function updateTag(req, res){
+  try{
+    const t = await Tag.findById(req.params.id)
+    if(!t) return res.status(404).send({ message: 'Tag no encontrado' })
+    const data = req.body
+    t.name = data.name ?? t.name
+    t.color = data.color ?? t.color
+    t.description = data.description ?? t.description
+    await t.save()
+    return res.status(200).send({ message: 'Tag actualizado', tag: t })
+  }catch(e){
+    return res.status(400).send({ message: 'Error actualizando tag', e })
+  }
+}
+
+async function deleteTag(req, res){
+  try{
+    const t = await Tag.findById(req.params.id)
+    if(!t) return res.status(404).send({ message: 'Tag no encontrado' })
+    const tagId = t._id
+    await Tag.deleteOne({ _id: tagId })
+    // limpiar referencias en schedules: establecer tag a null en bloques que lo referencian
+    await Schedule.updateMany(
+      { 'blocks.tag': tagId },
+      { $set: { 'blocks.$[elem].tag': null } },
+      { arrayFilters: [{ 'elem.tag': tagId }] }
+    )
+    return res.status(200).send({ message: 'Tag eliminado' })
+  }catch(e){
+    return res.status(400).send({ message: 'Error eliminando tag', e })
+  }
+}
+
 module.exports = {
   createSchedule, listSchedules, getSchedule, deleteSchedule, updateSchedule,
   addBlock, removeBlock, updateBlock, currentModule,
-  createTag, listTags
+  createTag, listTags,
+  updateTag, deleteTag
 }

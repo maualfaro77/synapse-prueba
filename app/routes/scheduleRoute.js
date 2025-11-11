@@ -6,6 +6,8 @@ const auth = require('../middleware/auth')
 // tags
 router.post('/tags', ctrl.createTag)
 router.get('/tags', ctrl.listTags)
+router.put('/tags/:id', auth, ctrl.updateTag)
+router.delete('/tags/:id', auth, ctrl.deleteTag)
 
 // schedules
 // crear schedule requiere autenticación
