@@ -4,6 +4,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 const app = require('../../app')
 
 let mongoServer
+let token
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create()
@@ -21,14 +22,19 @@ beforeEach(async () => {
   for (const name of collections) {
     await mongoose.connection.collections[name].deleteMany({})
   }
+  // crear usuario de prueba y obtener token
+  await request(app).post('/api/auth/register').send({ email: 'test@example.com', password: 'secret123' })
+  const loginRes = await request(app).post('/api/auth/login').send({ email: 'test@example.com', password: 'secret123' })
+  token = loginRes.body.token
 })
 
 test('PUT /api/schedules/:id/blocks/:blockId actualiza bloque no conflictivo', async () => {
-  const createRes = await request(app).post('/api/schedules').send({ name: 'Horario PUT' }).expect(201)
+  const createRes = await request(app).post('/api/schedules').set('Authorization', `Bearer ${token}`).send({ name: 'Horario PUT' }).expect(201)
   const scheduleId = createRes.body.schedule._id
 
   const addRes = await request(app)
     .post(`/api/schedules/${scheduleId}/blocks`)
+    .set('Authorization', `Bearer ${token}`)
     .send({ day: 1, start: '08:00', end: '10:00', title: 'Origen' })
     .expect(201)
 
@@ -37,6 +43,7 @@ test('PUT /api/schedules/:id/blocks/:blockId actualiza bloque no conflictivo', a
   // actualizar a un horario que no genera conflicto
   const putRes = await request(app)
     .put(`/api/schedules/${scheduleId}/blocks/${blockId}`)
+    .set('Authorization', `Bearer ${token}`)
     .send({ start: '07:00', end: '09:00', title: 'Actualizado' })
     .expect(200)
 
@@ -47,18 +54,19 @@ test('PUT /api/schedules/:id/blocks/:blockId actualiza bloque no conflictivo', a
 })
 
 test('PUT devuelve 409 cuando la actualización provoca solapamiento', async () => {
-  const createRes = await request(app).post('/api/schedules').send({ name: 'Horario PUT Conflicto' }).expect(201)
+  const createRes = await request(app).post('/api/schedules').set('Authorization', `Bearer ${token}`).send({ name: 'Horario PUT Conflicto' }).expect(201)
   const scheduleId = createRes.body.schedule._id
 
   // dos bloques
-  const r1 = await request(app).post(`/api/schedules/${scheduleId}/blocks`).send({ day:1, start: '08:00', end: '10:00', title: 'A' }).expect(201)
-  const r2 = await request(app).post(`/api/schedules/${scheduleId}/blocks`).send({ day:1, start: '10:30', end: '12:00', title: 'B' }).expect(201)
+  const r1 = await request(app).post(`/api/schedules/${scheduleId}/blocks`).set('Authorization', `Bearer ${token}`).send({ day:1, start: '08:00', end: '10:00', title: 'A' }).expect(201)
+  const r2 = await request(app).post(`/api/schedules/${scheduleId}/blocks`).set('Authorization', `Bearer ${token}`).send({ day:1, start: '10:30', end: '12:00', title: 'B' }).expect(201)
 
   const blockBId = r2.body.schedule.blocks.find(b => b.title === 'B')._id
 
   // intentar mover B para que choque con A
   const conflict = await request(app)
     .put(`/api/schedules/${scheduleId}/blocks/${blockBId}`)
+    .set('Authorization', `Bearer ${token}`)
     .send({ start: '09:00', end: '11:00' })
     .expect(409)
 
@@ -67,13 +75,13 @@ test('PUT devuelve 409 cuando la actualización provoca solapamiento', async () 
 })
 
 test('DELETE /api/schedules/:id/blocks/:blockId elimina el bloque', async () => {
-  const createRes = await request(app).post('/api/schedules').send({ name: 'Horario DELETE' }).expect(201)
+  const createRes = await request(app).post('/api/schedules').set('Authorization', `Bearer ${token}`).send({ name: 'Horario DELETE' }).expect(201)
   const scheduleId = createRes.body.schedule._id
 
-  const addRes = await request(app).post(`/api/schedules/${scheduleId}/blocks`).send({ day:1, start:'08:00', end:'10:00', title:'ToDelete' }).expect(201)
+  const addRes = await request(app).post(`/api/schedules/${scheduleId}/blocks`).set('Authorization', `Bearer ${token}`).send({ day:1, start:'08:00', end:'10:00', title:'ToDelete' }).expect(201)
   const blockId = addRes.body.schedule.blocks[0]._id
 
-  const delRes = await request(app).delete(`/api/schedules/${scheduleId}/blocks/${blockId}`).expect(200)
+  const delRes = await request(app).delete(`/api/schedules/${scheduleId}/blocks/${blockId}`).set('Authorization', `Bearer ${token}`).expect(200)
   expect(delRes.body.schedule).toBeDefined()
   expect(delRes.body.schedule.blocks.length).toBe(0)
 })

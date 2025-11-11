@@ -4,6 +4,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 const app = require('../../app') // app/app.js exports the express app
 
 let mongoServer
+let token
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create()
@@ -22,12 +23,17 @@ beforeEach(async () => {
   for (const name of collections) {
     await mongoose.connection.collections[name].deleteMany({})
   }
+  // registrar usuario de prueba y obtener token
+  await request(app).post('/api/auth/register').send({ email: 'test@example.com', password: 'secret123' })
+  const loginRes = await request(app).post('/api/auth/login').send({ email: 'test@example.com', password: 'secret123' })
+  token = loginRes.body.token
 })
 
 test('POST /api/schedules/:id/blocks devuelve 409 y conflictingBlocks cuando hay solapamiento', async () => {
   // crear horario
   const createRes = await request(app)
     .post('/api/schedules')
+    .set('Authorization', `Bearer ${token}`)
     .send({ name: 'Horario Test' })
     .expect(201)
   const scheduleId = createRes.body.schedule._id
@@ -35,12 +41,14 @@ test('POST /api/schedules/:id/blocks devuelve 409 y conflictingBlocks cuando hay
   // agregar bloque inicial
   await request(app)
     .post(`/api/schedules/${scheduleId}/blocks`)
+    .set('Authorization', `Bearer ${token}`)
     .send({ day: 1, start: '08:00', end: '10:00', title: 'Clase A' })
     .expect(201)
 
   // intentar agregar bloque que se solapa
   const conflictRes = await request(app)
     .post(`/api/schedules/${scheduleId}/blocks`)
+    .set('Authorization', `Bearer ${token}`)
     .send({ day: 1, start: '09:00', end: '09:30', title: 'Solapado' })
     .expect(409)
 
@@ -53,6 +61,7 @@ test('POST /api/schedules/:id/blocks devuelve 409 y conflictingBlocks cuando hay
 test('Detecta conflicto con bloque que cruza medianoche', async () => {
   const createRes = await request(app)
     .post('/api/schedules')
+    .set('Authorization', `Bearer ${token}`)
     .send({ name: 'Horario Noche' })
     .expect(201)
   const scheduleId = createRes.body.schedule._id
@@ -60,12 +69,14 @@ test('Detecta conflicto con bloque que cruza medianoche', async () => {
   // bloque que cruza medianoche
   await request(app)
     .post(`/api/schedules/${scheduleId}/blocks`)
+    .set('Authorization', `Bearer ${token}`)
     .send({ day: 1, start: '22:00', end: '02:00', title: 'Turno Noche' })
     .expect(201)
 
   // conflicto en día 1 noche
   const r1 = await request(app)
     .post(`/api/schedules/${scheduleId}/blocks`)
+    .set('Authorization', `Bearer ${token}`)
     .send({ day: 1, start: '23:00', end: '23:30', title: 'Overlap Noche' })
     .expect(409)
   expect(r1.body.conflictingBlocks.length).toBeGreaterThan(0)
@@ -73,6 +84,7 @@ test('Detecta conflicto con bloque que cruza medianoche', async () => {
   // conflicto en día 2 madrugada
   const r2 = await request(app)
     .post(`/api/schedules/${scheduleId}/blocks`)
+    .set('Authorization', `Bearer ${token}`)
     .send({ day: 2, start: '01:00', end: '01:30', title: 'Overlap Madrugada' })
     .expect(409)
   expect(r2.body.conflictingBlocks.length).toBeGreaterThan(0)
