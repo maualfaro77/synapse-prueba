@@ -42,6 +42,22 @@ async function deleteSchedule(req, res){
   }
 }
 
+async function updateSchedule(req, res){
+  try{
+    const data = req.body
+    const schedule = await Schedule.findById(req.params.id)
+    if(!schedule) return res.status(404).send({ message: 'Horario no encontrado' })
+    // permitir actualizar campos básicos (name, user)
+    schedule.name = data.name ?? schedule.name
+    schedule.user = data.user ?? schedule.user
+    // no permitir reemplazar blocks directamente por este endpoint
+    await schedule.save()
+    return res.status(200).send({ message: 'Horario actualizado', schedule })
+  }catch(e){
+    return res.status(400).send({ message: 'Error actualizando horario', e })
+  }
+}
+
 async function addBlock(req, res){
   try{
     const schedule = await Schedule.findById(req.params.id)

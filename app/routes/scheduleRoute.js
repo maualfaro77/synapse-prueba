@@ -12,6 +12,7 @@ router.get('/tags', ctrl.listTags)
 router.post('/schedules', auth, ctrl.createSchedule)
 router.get('/schedules', ctrl.listSchedules)
 router.get('/schedules/:id', ctrl.getSchedule)
+router.put('/schedules/:id', auth, ctrl.updateSchedule)
 router.delete('/schedules/:id', ctrl.deleteSchedule)
 
 // blocks inside schedules
