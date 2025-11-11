@@ -1,2 +1,28 @@
-node_modules
-app/config/configuracion.js
+# Dependencias
+node_modules/
+
+# Archivos de configuración locales
+/.env
+.env.local
+
+# Archivo de ejemplo (mantener en el repo)
+# .env.example  <-- intencionalmente no ignorado
+
+# Reportes de coverage
+coverage/
+
+# Logs
+npm-debug.log*
+*.log
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Build
+/dist
+/build
+
+# Otros
+coverage/

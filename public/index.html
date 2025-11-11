@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Horario Inteligente</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <button id="sidebar-toggle" class="btn-small" aria-label="Abrir menú">☰</button>
+      <h1>Horario Inteligente — Vista rápida</h1>
+    </div>
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <h2>Horario Inteligente</h2>
+        </div>
+        <div class="schedule-actions">
+          <form id="form-create-schedule" class="form-vertical">
+            <input id="schedule-name" placeholder="Nombre del horario (ej. Clases)" />
+            <input id="schedule-user" placeholder="Propietario (opcional)" />
+            <button id="btn-create-schedule" class="btn-primary">Crear horario</button>
+          </form>
+        </div>
+
+        <div class="schedule-list" id="schedule-list">
+          <h3>Tus horarios</h3>
+          <div id="schedule-items"></div>
+        </div>
+  </aside>
+  <div id="sidebar-overlay" class="sidebar-overlay" tabindex="-1"></div>
+
+      <main class="main">
+        <div class="controls">
+          <select id="schedules-select"><option value="">— Selecciona un horario —</option></select>
+          <button id="btn-refresh" class="btn-small">Refrescar</button>
+        </div>
+
+    <div id="status" class="status">Estado del servidor: <span id="server-status">OK</span></div>
+
+    <div id="quick-view" class="quick-view">
+      <h2>Vista rápida</h2>
+      <div id="no-activity" class="no-activity">Selecciona un horario para ver módulos</div>
+      <div id="modules" class="modules"></div>
+    </div>
+
+    <div id="manage" class="manage">
+      <h2>Gestionar horario</h2>
+      <div class="manage-row">
+        <div class="manage-col">
+          <h3>Bloques</h3>
+          <div id="blocks-list"></div>
+          <form id="form-add-block" class="form-inline">
+            <input type="hidden" id="block-id" />
+            <select id="block-day"><option value="1">Lun</option><option value="2">Mar</option><option value="3">Mié</option><option value="4">Jue</option><option value="5">Vie</option><option value="6">Sáb</option><option value="0">Dom</option></select>
+            <input id="block-start" placeholder="HH:mm" />
+            <input id="block-end" placeholder="HH:mm" />
+            <input id="block-title" placeholder="Título" />
+            <select id="block-tag"><option value="">— Sin tag —</option></select>
+            <button id="btn-add-block" class="btn-small">Agregar</button>
+            <button id="btn-cancel-edit" type="button" class="btn-small" style="background:#6c757d;margin-left:6px;display:none">Cancelar</button>
+          </form>
+        </div>
+
+        <div class="manage-col">
+          <h3>Etiquetas (tags)</h3>
+          <div id="tags-list"></div>
+          <form id="form-add-tag" class="form-inline">
+            <input id="tag-name" placeholder="Nombre" />
+            <input id="tag-color" placeholder="#rrggbb" />
+            <button id="btn-add-tag" class="btn-small">Crear tag</button>
+          </form>
+        </div>
+      </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- cordova.js se inyecta en tiempo de ejecución en la app Cordova; en navegador puede faltar -->
+  <script src="cordova.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
