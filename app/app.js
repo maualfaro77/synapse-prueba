@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const scheduleRouter = require('./routes/scheduleRoute')
+const authRouter = require('./routes/authRoute')
 
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
@@ -22,6 +23,20 @@ app.use((req, res, next) => {
 	next()
 })
 
+// endpoints de autenticación
+app.use('/api/auth', authRouter)
+
+// API de horario inteligente bajo /api
 app.use('/api', scheduleRouter)
+
+// middleware básico para forzar HTTPS si se configura (útil en producción detrás de proxy)
+const CONFIG = require('./config/configuracion')
+app.use((req, res, next) => {
+	if (CONFIG.FORCE_HTTPS && req.headers['x-forwarded-proto'] !== 'https') {
+		// redirigir a https
+		return res.redirect(`https://${req.headers.host}${req.url}`)
+	}
+	next()
+})
 
 module.exports = app

@@ -12,7 +12,11 @@
   "description": "",
   "dependencies": {
     "express": "^5.1.0",
-    "mongoose": "^8.16.0"
+    "mongoose": "^8.16.0",
+    "bcrypt": "^5.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "express-validator": "^7.0.1",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
