@@ -20,8 +20,8 @@ Antes de comenzar, asegúrate de tener instalado:
 
 ```bash
 # Si usas Git:
-git clone https://github.com/maualfaro77/rest-prueba9c.git
-cd rest-prueba9c
+git clone https://github.com/maualfaro77/synapse-prueba.git
+cd synapse-prueba
 
 # O simplemente descarga el ZIP y extrae la carpeta
 ```
@@ -59,6 +59,19 @@ Esto instalará todas las dependencias necesarias:
 ```javascript
 const URI = 'tu-cadena-de-conexion-de-atlas-aquí';
 ```
+
+Pasos rápidos para Atlas (resumen):
+1. Ve a https://www.mongodb.com/cloud/atlas y crea una cuenta gratuita.
+2. Crea un cluster (free tier) y espera a que esté provisionado.
+3. En Network Access agrega tu IP de desarrollo o permite 0.0.0.0/0 temporalmente para pruebas.
+4. Crea un usuario de base de datos con contraseña y copia la cadena de conexión (Change `<password>` y `<dbname>` según corresponda):
+
+```text
+mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/<dbname>?retryWrites=true&w=majority
+```
+5. Copia esa URI en tu `.env` como `MONGODB_URI=` o pega en `app/config/configuracion.js` en desarrollo.
+
+En producción configura `MONGODB_URI` como variable de entorno en tu proveedor (Render/Heroku/etc.).
 
 ### 4. Verificar configuración
 
