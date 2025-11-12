@@ -4,13 +4,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Horario Inteligente</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
     <div class="page-header">
-      <button id="sidebar-toggle" class="btn-small" aria-label="Abrir menú">☰</button>
-      <h1>Horario Inteligente — Vista rápida</h1>
+      <button id="sidebar-toggle" class="btn-small" aria-label="Abrir menú">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12H21" stroke="#F0C18F" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 6H21" stroke="#F0C18F" stroke-width="2" stroke-linecap="round"/>
+          <path d="M3 18H21" stroke="#F0C18F" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <h1>Horario Inteligente</h1>
+      <div class="header-actions">
+        <button id="btn-refresh" class="btn-icon" aria-label="Refrescar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23 4V10H17" stroke="#F0C18F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 20V14H7" stroke="#F0C18F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3.51 9C4.01717 7.56678 4.87913 6.2854 6.01547 5.27542C7.1518 4.26543 8.52547 3.55976 10.0083 3.22426C11.4911 2.88875 13.0348 2.93434 14.4952 3.35677C15.9556 3.7792 17.2853 4.56471 18.36 5.64L23 10M1 14L5.64 18.36C6.71475 19.4353 8.04437 20.2208 9.50481 20.6432C10.9652 21.0657 12.5089 21.1113 13.9917 20.7757C15.4745 20.4402 16.8482 19.7346 17.9845 18.7246C19.1209 17.7146 19.9828 16.4332 20.49 15" stroke="#F0C18F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
     <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
     <div class="layout">
@@ -30,57 +45,59 @@
           <h3>Tus horarios</h3>
           <div id="schedule-items"></div>
         </div>
-  </aside>
-  <div id="sidebar-overlay" class="sidebar-overlay" tabindex="-1"></div>
+      </aside>
+      <div id="sidebar-overlay" class="sidebar-overlay" tabindex="-1"></div>
 
       <main class="main">
         <div class="controls">
           <select id="schedules-select"><option value="">— Selecciona un horario —</option></select>
-          <button id="btn-refresh" class="btn-small">Refrescar</button>
         </div>
 
-    <div id="status" class="status">Estado del servidor: <span id="server-status">OK</span></div>
+        <div id="status" class="status">Estado del servidor: <span id="server-status">OK</span></div>
 
-    <div id="quick-view" class="quick-view">
-      <h2>Vista rápida</h2>
-      <div id="no-activity" class="no-activity">Selecciona un horario para ver módulos</div>
-      <div id="modules" class="modules"></div>
-    </div>
-
-    <div id="manage" class="manage">
-      <h2>Gestionar horario</h2>
-      <div class="manage-row">
-        <div class="manage-col">
-          <h3>Bloques</h3>
-          <div id="blocks-list"></div>
-          <form id="form-add-block" class="form-inline">
-            <input type="hidden" id="block-id" />
-            <select id="block-day"><option value="1">Lun</option><option value="2">Mar</option><option value="3">Mié</option><option value="4">Jue</option><option value="5">Vie</option><option value="6">Sáb</option><option value="0">Dom</option></select>
-            <input id="block-start" placeholder="HH:mm" />
-            <input id="block-end" placeholder="HH:mm" />
-            <input id="block-title" placeholder="Título" />
-            <select id="block-tag"><option value="">— Sin tag —</option></select>
-            <button id="btn-add-block" class="btn-small">Agregar</button>
-            <button id="btn-cancel-edit" type="button" class="btn-small" style="background:#6c757d;margin-left:6px;display:none">Cancelar</button>
-          </form>
+        <div id="quick-view" class="quick-view">
+          <h2>Vista rápida</h2>
+          <div id="no-activity" class="no-activity">Selecciona un horario para ver módulos</div>
+          <div id="modules" class="modules"></div>
         </div>
 
-        <div class="manage-col">
-          <h3>Etiquetas (tags)</h3>
-          <div id="tags-list"></div>
-          <form id="form-add-tag" class="form-inline">
-            <input id="tag-name" placeholder="Nombre" />
-            <input id="tag-color" placeholder="#rrggbb" />
-            <button id="btn-add-tag" class="btn-small">Crear tag</button>
-          </form>
+        <div id="manage" class="manage">
+          <h2>Gestionar horario</h2>
+          <div class="manage-row">
+            <div class="manage-col blocks-section">
+              <h3>Bloques</h3>
+              <div id="blocks-list"></div>
+              <form id="form-add-block" class="form-inline">
+                <input type="hidden" id="block-id" />
+                <select id="block-day"><option value="1">Lun</option><option value="2">Mar</option><option value="3">Mié</option><option value="4">Jue</option><option value="5">Vie</option><option value="6">Sáb</option><option value="0">Dom</option></select>
+                <input type="time" id="block-start" />
+                <input type="time" id="block-end" />
+                <input id="block-title" placeholder="Título" />
+                <select id="block-tag"><option value="">— Sin tag —</option></select>
+                <div class="form-actions">
+                  <button id="btn-add-block" class="btn-small btn-purple">Agregar</button>
+                  <button id="btn-cancel-edit" type="button" class="btn-small btn-cancel" style="display:none">Cancelar</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="manage-col tags-section">
+              <h3>Etiquetas (tags)</h3>
+              <div id="tags-list"></div>
+              <form id="form-add-tag" class="form-inline">
+                <input id="tag-name" placeholder="Nombre" />
+                <input id="tag-color" placeholder="#rrggbb" />
+                <button id="btn-add-tag" class="btn-small btn-purple">Crear tag</button>
+              </form>
+            </div>
+          </div>
         </div>
-      </div>
       </main>
     </div>
   </div>
 
   <!-- cordova.js se inyecta en tiempo de ejecución en la app Cordova; en navegador puede faltar -->
   <script src="cordova.js"></script>
-  <script src="/app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
