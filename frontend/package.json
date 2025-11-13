@@ -1,0 +1,16 @@
+{
+  "name": "horario-inteligente-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Horario Inteligente application",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=8080 --host=localhost --open=/index.html",
+    "dev": "live-server --port=8080 --host=localhost --open=/index.html --watch=."
+  },
+  "dependencies": {
+    "live-server": "^1.2.2"
+  },
+  "keywords": ["frontend", "html", "css", "javascript"],
+  "author": "Your Name",
+  "license": "MIT"
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horario Inteligente</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>📅 Horario Inteligente</h1>
+                <div class="header-buttons">
+                    <button id="loginBtn" class="btn-secondary">Login</button>
+                    <button id="refreshBtn" class="btn-icon">🔄</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Sección de creación de horario -->
+            <section class="create-section">
+                <h2>Horario Inteligente</h2>
+                
+                <form id="horarioForm" class="horario-form">
+                    <div class="form-group">
+                        <label for="nombreHorario">Nombre del horario (ej. Clases)</label>
+                        <input type="text" id="nombreHorario" name="nombre" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="propietario">Propietario (opcional)</label>
+                        <input type="text" id="propietario" name="propietario">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Crear horario</button>
+                </form>
+
+                <div class="tus-horarios">
+                    <h3>Tus horarios</h3>
+                    <div id="listaHorarios" class="horarios-list">
+                        <!-- Los horarios se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de vista rápida -->
+            <section class="quick-view">
+                <h3>Vista rápida</h3>
+                <div class="quick-view-content">
+                    <p>Selecciona un horario para ver módulos</p>
+                </div>
+            </section>
+
+            <!-- Sección de gestión de horario -->
+            <section class="manage-section" id="manageSection" style="display: none;">
+                <h2>Gestionar horario</h2>
+                
+                <div class="manage-content">
+                    <div class="bloques-section">
+                        <h3>Bloques</h3>
+                        <form id="bloqueForm" class="bloque-form">
+                            <div class="form-row">
+                                <select id="diaBloque" name="dia" required>
+                                    <option value="">Día</option>
+                                    <option value="Lun">Lun</option>
+                                    <option value="Mar">Mar</option>
+                                    <option value="Mie">Mie</option>
+                                    <option value="Jue">Jue</option>
+                                    <option value="Vie">Vie</option>
+                                    <option value="Sab">Sab</option>
+                                    <option value="Dom">Dom</option>
+                                </select>
+                                
+                                <input type="time" id="horaInicio" name="horaInicio" required>
+                                <input type="time" id="horaFin" name="horaFin" required>
+                                <input type="text" id="materia" name="materia" placeholder="Materia" required>
+                            </div>
+                            <button type="submit" class="btn-secondary">Agregar</button>
+                        </form>
+                        
+                        <div id="bloquesList" class="bloques-list">
+                            <!-- Los bloques se mostrarán aquí -->
+                        </div>
+                    </div>
+
+                    <div class="etiquetas-section">
+                        <h3>Etiquetas (tags)</h3>
+                        <form id="etiquetaForm" class="etiqueta-form">
+                            <div class="form-row">
+                                <input type="text" id="nuevaEtiqueta" placeholder="Nombre" required>
+                                <input type="color" id="colorEtiqueta" value="#7c3aed">
+                                <button type="submit" class="btn-secondary">Crear tag</button>
+                            </div>
+                        </form>
+                        
+                        <div id="etiquetasList" class="etiquetas-list">
+                            <!-- Las etiquetas se mostrarán aquí -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

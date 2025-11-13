@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Horario Inteligente</title>
+    <link rel="stylesheet" href="auth-styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>📅 Horario Inteligente</h1>
+                <h2>👤 Crear Cuenta</h2>
+                <p>Regístrate para comenzar a organizar tus horarios</p>
+            </div>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="nombre">👤 Nombre completo:</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre completo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">📧 Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">🔒 Contraseña:</label>
+                    <input type="password" id="password" name="password" required minlength="6" placeholder="Mínimo 6 caracteres">
+                    <small class="password-hint">La contraseña debe tener al menos 6 caracteres</small>
+                </div>
+                
+                <button type="submit" class="btn-primary">Crear Cuenta</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>¿Ya tienes cuenta?</p>
+                <a href="login.html" class="auth-link">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notifications -->
+    <div id="notifications"></div>
+    
+    <script src="auth.js"></script>
+</body>
+</html>
